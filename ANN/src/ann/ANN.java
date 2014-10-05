@@ -13,7 +13,7 @@ package ann;
 public class ANN {
 
     // TAMAÑO ENTRADA
-    private static int n = 3;
+    private static int n = 1;
     // TAMAÑO SALIDA
     private static int s = 1;
     // UNIDADES EN LA CAPA OCULTA
@@ -21,37 +21,36 @@ public class ANN {
     // CONJUNTO DE ENTRENAMIENTO
     private static int d = 20;
     // CTE DE APRENDIZAJE
-    private static double constant = 1.0;
+    private static double constant = 0.1;
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // GENERAR ENTRADA
-        double [][] input = new double [d][n];
-        /*input [0][0] = 0;
-        input [0][1] = 0;
-        input [0][2] = 1;*/
+        int mode = 2;
+        double [][] input = new double [d][n+1];
         double ini = -1.0;
         double fin = 1.0;
         double range = fin - ini;
-        for(int i=0; i< d; i++)
+        for(int i=0; i< d; i++){
             for(int j=0; j<n; j++){
-                input[i][j] = ini;
-                ini += range/d;
+                input[i][j] = ini;                
             }
+            input[i][n] = 1.0;                
+            ini += (range/d);
+        }
                 
         // INICIALIZAR PESOS           
-        double [][] wij = new double [m][n];        
+        double [][] wij = new double [m][n+1];        
         for(int i=0; i< m; i++)
-            for(int j=0; j<n; j++)
-                wij[i][j] = 1.0;
-                //wij[i][j] = Math.random();
+            for(int j=0; j<n; j++)                
+                wij[i][j] = Math.random();
         
         double [][] outw = new double [s][m+1];        
         for(int i=0; i<s; i++)
-            for(int j=0; j< (m+1); j++)
-                outw[i][j] = 1.0;
+            for(int j=0; j< m+1; j++)
+                outw[i][j] = Math.random();
                 
                 
         
@@ -64,52 +63,51 @@ public class ANN {
         
         // COMIENZA EL ALGORITMO
         for(int k=0; k<d;k++){
+            
             // ADELANTE - CAPA OCULTA
             for(int i=0;i<m;i++){
-                for(int j=0; j<n; j++){
+                ni[i] = 0.0;
+                for(int j=0; j<n+1; j++){
                     ni[i] += (wij[i][j]) * input[k][j];
                 }
                 zi[i] = (1.0 / (1 + Math.exp(-ni[i])));                
             }
+            
             // ADELANTE - CAPA SALIDA
             for(int i=0;i<s;i++){
+                outn[i] = 0.0;
                 for(int j=0;j<m;j++){
                     outn[i] += (outw[i][j] * zi[j]);
                 }
-                outn[i] += (outw[i][m] * expectedResult(input[k]));
+                outn[i] += (outw[i][m]);
                 outz[i] = (1.0 / (1 + Math.exp(-outn[i])));                                
             }
             
             // ATRAS - CAPA SALIDA
-            for(int i=0;i<s;i++)
-                outdelta[i] = outz[i] * (1 - outz[i]) * (expectedResult(input[k]) - outz[i]);
-            
-            // SUMATORIA DE LAS SALIDAS
-            double sum  = outdelta[s-1];
-            
-            // ATRAS - CAPA OCULTA
-            for(int i=0;i<m;i++){
-                delta[i] = zi[i] * (1 - zi[i]) * (sum * outw[s-1][i]);
+            for(int i=0;i<s;i++){
+                outdelta[i] = outz[i] * (1 - outz[i]) * (expectedResult(input[k], mode) - outz[i]);
+                for(int j=0;j<m;j++)
+                    delta[j] = zi[j] * (1 - zi[j]) *  (expectedResult(input[k], mode) - outz[i]);
             }
+            
             
             // ACTUALIZAR PESOS
             for(int i=0; i< m; i++)
-                for(int j=0; j<n; j++)
+                for(int j=0; j<n+1; j++)
                     wij[i][j] += (constant * delta[i] * input[k][j]);
             
             for(int i=0; i<s; i++){
                 for(int j=0; j< m; j++)
-                    outw[i][j] += (constant * outdelta[i] * zi[j] * ni[j]);
-        
-                outw[i][m] += (constant * outdelta[i] * expectedResult(input[k]));
+                    outw[i][j] += (constant * outdelta[i] * zi[j]);                   
+                outw[i][m] += (constant * outdelta[i]);
             }
             
-            print(k, ni, zi, wij, outdelta, outw);
+            print(k, ni, zi, wij, outdelta, outw, outn, input[k]);
         }
         
     }
 
-    private static void print(int k, double[] ni, double[] zi, double[][] wij, double[] outdelta, double[][] outw) {
+    private static void print(int k, double[] ni, double[] zi, double[][] wij, double[] outdelta, double[][] outw, double [] outn, double[] input) {
         // PRINT
         System.out.println("******* K: " + k + " ********");
         for(int i=0; i< m; i++){
@@ -122,12 +120,19 @@ public class ANN {
         
         for(int i=0; i<s; i++){
             System.out.println("delta: " + outdelta[i]);
-            for(int j=0; j< m+1; j++)
+            System.out.println("entrada: " + input[i]);
+            System.out.println("salida: " + outn[i]);
+            for(int j=0; j< m; j++)
                 System.out.println(i + "-" + j +": " + outw[i][j]);
         }
     }
     
-    static double expectedResult(double[] sample){
-        return sample[n-1];
+    static double expectedResult(double[] sample, int mode){
+        if (mode == 0)
+            return sample[n-1];
+        else if(mode == 1)
+            return ((sample[n-1]) * (sample[n-1]) * (sample[n-1])* (sample[n-1]));
+        else
+            return Math.sin((3.0/2.0) * Math.PI * sample[n-1]);
     }
 }
