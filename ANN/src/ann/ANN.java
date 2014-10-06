@@ -28,7 +28,9 @@ public class ANN {
      */
     public static void main(String[] args) {
         // GENERAR ENTRADA
-        int mode = 2;
+        int mode = 0;
+        int iteraciones = 1000;
+        double error = 0.0;
         double [][] input = new double [d][n+1];
         double ini = -1.0;
         double fin = 1.0;
@@ -45,12 +47,12 @@ public class ANN {
         double [][] wij = new double [m][n+1];        
         for(int i=0; i< m; i++)
             for(int j=0; j<n; j++)                
-                wij[i][j] = Math.random();
+                wij[i][j] = -1.0 + Math.random()*(1 - (-1));
         
         double [][] outw = new double [s][m+1];        
         for(int i=0; i<s; i++)
             for(int j=0; j< m+1; j++)
-                outw[i][j] = Math.random();
+                outw[i][j] = -1.0 + Math.random()*(1 - (-1));
         
         NeuronLayer capaOculta = new NeuronLayer(wij);
         NeuronLayer capaSalida = new NeuronLayer(outw);
@@ -63,6 +65,10 @@ public class ANN {
         double [] delta = new double[m];
         double [] outdelta = new double[s];
         
+        
+        for (int l= 0; l < iteraciones; l++){
+            
+        error = 0.0;
         // COMIENZA EL ALGORITMO
         for(int k=0; k<d;k++){            
             capaOculta.setNeuronInput(input[k]);
@@ -80,11 +86,12 @@ public class ANN {
                     delta[j] = zi[j] * (1 - zi[j]) *  (expectedResult(input[k], mode) - outz[i]);
             }
             
-            
+            error += ((expectedResult(input[k], mode) - outz[s-1]) * (expectedResult(input[k], mode) - outz[s-1]));
             // ACTUALIZAR PESOS
             for(int i=0; i< m; i++)
                 for(int j=0; j<n+1; j++)
                     wij[i][j] += (constant * delta[i] * input[k][j]);
+            
             capaOculta.setNeuronWeights(wij);
             
             for(int i=0; i<s; i++){
@@ -93,13 +100,14 @@ public class ANN {
                 outw[i][m] += (constant * outdelta[i]);
             }
             capaSalida.setNeuronWeights(outw);
-            
-            print(k, zi, wij, outdelta, outw, outz, input[k]);
+                        
+        }
+        System.out.println(error/2);
         }
         
     }
 
-    private static void print(int k, double[] zi, double[][] wij, double[] outdelta, double[][] outw, double [] outz, double[] input) {
+    /*private static void print(int k, double[] zi, double[][] wij, double[] outdelta, double[][] outw, double [] outz, double[] input) {
         // PRINT
         System.out.println("******* K: " + k + " ********");
         for(int i=0; i< m; i++){
@@ -116,7 +124,7 @@ public class ANN {
             for(int j=0; j< m; j++)
                 System.out.println(i + "-" + j +": " + outw[i][j]);
         }
-    }
+    }*/
     
     static double expectedResult(double[] sample, int mode){
         if (mode == 0)
