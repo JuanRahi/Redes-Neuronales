@@ -76,7 +76,7 @@ public class TaTeTi {
                 board = player1.chooseMove();
                 game.move(board);
                 if(!board.isFinished()){
-                    if (mode == 0){
+                    if (mode == 0 || mode == 3){
                         int a = 2;
                         int b = 2;
                         while(!board.isCellFree(a, b))
@@ -110,10 +110,10 @@ public class TaTeTi {
                 
             }
             
-            if(j%1000==0)
-                player1.setUpdateConstant(player1.getUpdateConstant()/2);
+            //if(j%1000==0)
+                //player1.setUpdateConstant(player1.getUpdateConstant()/2);
             
-            player1.updateWeights(game.getGameHistory(), critic.getTrainingValues(game.getGameHistory(), CellValue.X));
+            //player1.updateWeights(game.getGameHistory(), critic.getTrainingValues(game.getGameHistory(), CellValue.X));
         }
         System.out.println("=============================================");
         System.out.println("wins: " + winX);
