@@ -17,7 +17,7 @@ public class ANN {
     // TAMAÑO SALIDA
     private static int s = 1;
     // UNIDADES EN LA CAPA OCULTA
-    private static int m = 2;
+    private static int m = 3;
     // CONJUNTO DE ENTRENAMIENTO
     private static int d = 20;
     // CTE DE APRENDIZAJE
@@ -105,36 +105,16 @@ public class ANN {
                 }
                 capaSalida.setNeuronWeights(outw);
                 
-                //if(k == 0)
-                    //System.out.printf("%.2f\n", outz[s-1]);                    
+                if(l == iteraciones -1)
+                    System.out.printf("%.2f\n", outz[s-1]);                    
 
             }
             
-            System.out.printf("%.2f\n", error);                    
-            //System.out.println(error);
+            //System.out.printf("%.2f\n", error);                    
             
         }
         
-    }
-
-    /*private static void print(int k, double[] zi, double[][] wij, double[] outdelta, double[][] outw, double [] outz, double[] input) {
-        // PRINT
-        System.out.println("******* K: " + k + " ********");
-        for(int i=0; i< m; i++){
-            System.out.println("z: " + zi[i]);
-            for(int j=0; j<n; j++)
-                System.out.println(i + "-" + j +": " + wij[i][j]);
-            
-        }
-        
-        for(int i=0; i<s; i++){
-            System.out.println("delta: " + outdelta[i]);
-            System.out.println("entrada: " + input[i]);
-            System.out.println("salida: " + outz[i]);
-            for(int j=0; j< m; j++)
-                System.out.println(i + "-" + j +": " + outw[i][j]);
-        }
-    }*/
+    }   
     
     static double expectedResult(double[] sample, int mode){
         if (mode == 0)

@@ -38,8 +38,8 @@ public class ExperimentGenerator {
     }
     
     public double[] getBoardFeatures(Board board, TaTeTi.CellValue player) throws Exception{
-        double[] result = new double[8];
-        for(int k=0; k<8; k++)
+        double[] result = new double[7];
+        for(int k=0; k<7; k++)
             result[k]=0;
         TaTeTi.CellValue oponent = player.equals(TaTeTi.CellValue.X) ? TaTeTi.CellValue.O : TaTeTi.CellValue.X;
                
