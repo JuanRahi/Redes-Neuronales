@@ -90,7 +90,8 @@ public class ANNPlayer implements TaTeTiPlayer {
         double vTrain, vEst;
         Board board;
         for(int i = 0; i < gameHistory.size(); i++){
-            vTrain = vTrainValues[i];
+            //Vtrain iba entre -100 y 100. Normalizamos al rango [0-1]
+            vTrain = (vTrainValues[i] - (-100.0)) / (100.0 - (-100.0));
             board = gameHistory.get(i);
             vEst = board.puntaje;            
             if(TaTeTi.print)
