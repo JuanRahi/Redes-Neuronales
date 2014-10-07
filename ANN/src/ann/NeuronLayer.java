@@ -47,7 +47,7 @@ public class NeuronLayer {
         Iterator it = neuronList.iterator();
         int i = 0;
         while(it.hasNext()){
-            ((Neuron)it.next()).setInput(weights[i]);
+            ((Neuron)it.next()).setWeights(weights[i]);
             i++;
         }
     }
