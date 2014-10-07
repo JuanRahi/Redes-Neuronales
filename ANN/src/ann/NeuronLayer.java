@@ -31,7 +31,6 @@ public class NeuronLayer {
     
     public double[] getResult(){
         double [] output = new double[neuronList.size()];
-        Iterator it = neuronList.iterator();
         for(int i =0; i<neuronList.size(); i++)
             output[i] = neuronList.get(i).getResult();
         return output;

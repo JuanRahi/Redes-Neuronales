@@ -25,8 +25,8 @@ public class TaTeTi {
      */
     public static void main(String[] args) {        
         print = false;
-        int mode = 0; // 0 = vsRandom -- 1 = vsOldVersion -- 2 = vsHuman         
-        int juegos = 100000;
+        int mode = 3; // 0 = vsRandom -- 1 = vsOldVersion -- 2 = vsHuman         
+        int juegos = 10;
         PerformanceSystem oldVersionPlayer = null;
         
         try {
@@ -45,7 +45,12 @@ public class TaTeTi {
                             print = true;
                             vsHuman(null);
                             //vsHuman(oldVersionPlayer);
-                            return;                                                                                       
+                            return;   
+                    case 3: System.out.println("ANN\n");
+                            print = true;
+                            ANN(juegos, mode);                                               
+                            return;       
+                        
                 }                                                
             }
             
@@ -56,7 +61,7 @@ public class TaTeTi {
         
     }
     
-    public static void play(int juegos, Board board, PerformanceSystem player1, PerformanceSystem player2, int mode) throws Exception{
+    public static void play(int juegos, Board board, TaTeTiPlayer player1, TaTeTiPlayer player2, int mode) throws Exception{                
         Game game = new Game(player1, player2);        
         Critic critic = new Critic();
         int x, y, winX =0, winO=0, ties=0, moveCounter = 0;
@@ -96,12 +101,12 @@ public class TaTeTi {
             moveCounter += game.moveCounter;
             if(game.winner.equals(CellValue.O)){
                 System.out.println("gandor partida " + (j+1) + ": " + (game.winner));
-                System.out.println("w0: " + player1.w0);
+                /*System.out.println("w0: " + player1.w0);
                 System.out.println("w1: " + player1.w1);
                 System.out.println("w2: " + player1.w2);
                 System.out.println("w3 " + player1.w3);
                 System.out.println("w4: " + player1.w4);
-                System.out.println("w5: " + player1.w5);
+                System.out.println("w5: " + player1.w5);*/
                 
             }
             
@@ -115,9 +120,17 @@ public class TaTeTi {
         System.out.println("lost: " + winO);
         System.out.println("tied: " + ties);
         System.out.println("avarage moves: " + moveCounter/juegos);
-        critic.updateWeights(player1.getWeights(), player1.constant);
-        player1.printWeights();        
+        //critic.updateWeights(player1.getWeights(), player1.constant);
+        //player1.printWeights();        
     }
+    
+    private static void ANN(int juegos, int mode) throws Exception {
+        Board board = new Board();
+        TaTeTiPlayer player1 = new ANNPlayer(board, CellValue.X);
+        TaTeTiPlayer player2 = new PerformanceSystem(board, CellValue.O);
+        play(juegos, board, player1, player2, mode);        
+    }
+    
     
     private static PerformanceSystem vsRandomPlayer(int juegos, int mode) throws Exception {
         Board board = new Board();

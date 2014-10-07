@@ -52,7 +52,7 @@ public class PerformanceSystem implements TaTeTiPlayer{
         updateConstant = 0.0001;
     }
     
-        public void printWeights(){        
+    public void printWeights(){        
         System.out.println("constant: " + constant);
         System.out.println("updateConstant: " + updateConstant);
         System.out.println("w0: " + w0);
@@ -81,6 +81,7 @@ public class PerformanceSystem implements TaTeTiPlayer{
     public void setBoard(Board board){
         this.currentBoard = board;
     }
+    
     public double vEstimate(Board board, boolean print) throws Exception{
         double[] feature = eg.getBoardFeatures(board, cellValue);
         if(print){
@@ -93,7 +94,7 @@ public class PerformanceSystem implements TaTeTiPlayer{
         return board.puntaje;
     }
     
-    @Override
+    
     public Board chooseMove() throws Exception{
         int ties = 1;
         double bestValue = Double.NEGATIVE_INFINITY, currentValue;
@@ -144,6 +145,7 @@ public class PerformanceSystem implements TaTeTiPlayer{
 //        }
     }
     
+    
     public void updateWeights(LinkedList<Board> gameHistory, double[] vTrainValues) throws Exception{
         double vTrain, vEst;
         Board board;
@@ -166,9 +168,11 @@ public class PerformanceSystem implements TaTeTiPlayer{
         }            
     }
     
+    
     public void setUpdateConstant(double update){
         updateConstant= update;
     }
+    
     
     public double getUpdateConstant(){
         return updateConstant;

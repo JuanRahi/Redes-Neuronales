@@ -29,7 +29,7 @@ public class ANN {
     public static void main(String[] args) {
         // GENERAR ENTRADA
         int mode = 0;
-        int iteraciones = 1000;
+        int iteraciones = 10;
         double error = 0.0;
         double [][] input = new double [d][n+1];
         double ini = -1.0;
@@ -46,13 +46,13 @@ public class ANN {
         // INICIALIZAR PESOS           
         double [][] wij = new double [m][n+1];        
         for(int i=0; i< m; i++)
-            for(int j=0; j<n; j++)                
-                wij[i][j] = -1.0 + Math.random()*(1 - (-1));
+            for(int j=0; j<n+1; j++)                
+                wij[i][j] = -1.0 + (Math.random()*(1 - (-1)));
         
         double [][] outw = new double [s][m+1];        
         for(int i=0; i<s; i++)
             for(int j=0; j< m+1; j++)
-                outw[i][j] = -1.0 + Math.random()*(1 - (-1));
+                outw[i][j] = -1.0 + (Math.random()*(1 - (-1)));
         
         NeuronLayer capaOculta = new NeuronLayer(wij);
         NeuronLayer capaSalida = new NeuronLayer(outw);
@@ -66,43 +66,45 @@ public class ANN {
         double [] outdelta = new double[s];
         
         
-        for (int l= 0; l < iteraciones; l++){
+        for (int l= 0; l < iteraciones; l++){            
+            error = 0.0;
             
-        error = 0.0;
-        // COMIENZA EL ALGORITMO
-        for(int k=0; k<d;k++){            
-            capaOculta.setNeuronInput(input[k]);
-            // ADELANTE - CAPA OCULTA            
-            zi = capaOculta.getResult();
-            
-            // ADELANTE - CAPA SALIDA
-            capaSalida.setNeuronInput(zi);
-            outz = capaSalida.getResult();
-            
-            // ATRAS - CAPA SALIDA
-            for(int i=0;i<s;i++){
-                outdelta[i] = outz[i] * (1 - outz[i]) * (expectedResult(input[k], mode) - outz[i]);
-                for(int j=0;j<m;j++)
-                    delta[j] = zi[j] * (1 - zi[j]) *  (expectedResult(input[k], mode) - outz[i]);
+            // COMIENZA EL ALGORITMO
+            for(int k=0; k<d;k++){            
+
+                // ADELANTE - CAPA OCULTA  
+                capaOculta.setNeuronInput(input[k]);          
+                zi = capaOculta.getResult();
+
+                // ADELANTE - CAPA SALIDA
+                capaSalida.setNeuronInput(zi);
+                outz = capaSalida.getResult();
+
+                // ATRAS
+                for(int i=0;i<s;i++){
+                    outdelta[i] = outz[i] * (1 - outz[i]) * (expectedResult(input[k], mode) - outz[i]);
+                    for(int j=0;j<m;j++)
+                        delta[j] = zi[j] * (1 - zi[j]) *  (expectedResult(input[k], mode) - outz[i]);
+                }
+
+                error += ((expectedResult(input[k], mode) - outz[s-1]) * (expectedResult(input[k], mode) - outz[s-1]));
+
+                // ACTUALIZAR PESOS
+                for(int i=0; i< m; i++)
+                    for(int j=0; j<n+1; j++)
+                        wij[i][j] += (constant * delta[i] * input[k][j]);
+
+                capaOculta.setNeuronWeights(wij);
+
+                for(int i=0; i<s; i++){
+                    for(int j=0; j< m; j++)
+                        outw[i][j] += (constant * outdelta[i] * zi[j]);                   
+                    outw[i][m] += (constant * outdelta[i]);
+                }
+                capaSalida.setNeuronWeights(outw);
+
             }
-            
-            error += ((expectedResult(input[k], mode) - outz[s-1]) * (expectedResult(input[k], mode) - outz[s-1]));
-            // ACTUALIZAR PESOS
-            for(int i=0; i< m; i++)
-                for(int j=0; j<n+1; j++)
-                    wij[i][j] += (constant * delta[i] * input[k][j]);
-            
-            capaOculta.setNeuronWeights(wij);
-            
-            for(int i=0; i<s; i++){
-                for(int j=0; j< m; j++)
-                    outw[i][j] += (constant * outdelta[i] * zi[j]);                   
-                outw[i][m] += (constant * outdelta[i]);
-            }
-            capaSalida.setNeuronWeights(outw);
-                        
-        }
-        System.out.println(error/2);
+            System.out.println(error/2);
         }
         
     }
