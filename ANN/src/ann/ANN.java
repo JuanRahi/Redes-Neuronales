@@ -29,7 +29,7 @@ public class ANN {
     public static void main(String[] args) {
         // GENERAR ENTRADA
         int mode = 0;
-        int iteraciones = 10;
+        int iteraciones = 1000;
         double error = 0.0;
         double [][] input = new double [d][n+1];
         double ini = -1.0;
@@ -47,12 +47,13 @@ public class ANN {
         double [][] wij = new double [m][n+1];        
         for(int i=0; i< m; i++)
             for(int j=0; j<n+1; j++)                
-                wij[i][j] = -1.0 + (Math.random()*(1 - (-1)));
+                wij[i][j] = -1.0 + (Math.random() * (1 - (-1)));
+
         
         double [][] outw = new double [s][m+1];        
         for(int i=0; i<s; i++)
             for(int j=0; j< m+1; j++)
-                outw[i][j] = -1.0 + (Math.random()*(1 - (-1)));
+                outw[i][j] = -1.0 + (Math.random() * (1 - (-1)));
         
         NeuronLayer capaOculta = new NeuronLayer(wij);
         NeuronLayer capaSalida = new NeuronLayer(outw);
@@ -87,7 +88,8 @@ public class ANN {
                         delta[j] = zi[j] * (1 - zi[j]) *  (expectedResult(input[k], mode) - outz[i]);
                 }
 
-                error += ((expectedResult(input[k], mode) - outz[s-1]) * (expectedResult(input[k], mode) - outz[s-1]));
+                error += ((expectedResult(input[k], mode) - outz[s-1]) * (expectedResult(input[k], mode) - outz[s-1]))/2;
+                
 
                 // ACTUALIZAR PESOS
                 for(int i=0; i< m; i++)
@@ -102,9 +104,15 @@ public class ANN {
                     outw[i][m] += (constant * outdelta[i]);
                 }
                 capaSalida.setNeuronWeights(outw);
+                
+                //if(k == 0)
+                    //System.out.printf("%.2f\n", outz[s-1]);                    
 
             }
-            System.out.println(error/2);
+            
+            System.out.printf("%.2f\n", error);                    
+            //System.out.println(error);
+            
         }
         
     }

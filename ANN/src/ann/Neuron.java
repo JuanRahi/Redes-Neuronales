@@ -33,9 +33,11 @@ public class Neuron {
     public double getResult(){
         double y= 0.0;
         //weigths.length tiene el expected result
-        for(int j=0; j<weights.length -1; j++){
+        for(int j=0; j<input.length; j++){
             y += (weights[j]) * input[j];
         }
-        return (1.0 / (1 + Math.exp(-y)));             
+        if(weights.length > input.length)
+            y += weights[weights.length -1];
+        return (1.0 / (1.0 + Math.exp(-y)));             
     }
 }

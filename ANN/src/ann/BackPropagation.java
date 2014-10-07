@@ -5,7 +5,6 @@
  */
 package ann;
 
-import static ann.ANN.expectedResult;
 
 /**
  *
@@ -60,11 +59,11 @@ public class BackPropagation {
     public void updateWeigths(double target){
         for(int i=0;i<s;i++){
             for(int j=0;j<m;j++){
-                outw[i][j] += (constant * outz[i] * (1 - outz[i]) * (target - outz[i]) * zi[j]);            
+                outw[i][j] += (constant * 100 * outz[i] * (1 - outz[i]) * (target - (100 * outz[i])) * zi[j]);            
                 for(int a=0; a<n+1; a++)
-                    wij[j][a] += (constant * zi[j] * (1 - zi[j]) *  (target - outz[i]) * input[a]);
+                    wij[j][a] += (constant * zi[j] * (1 - zi[j]) *  (target - (100 * outz[i])) * input[a]);
             }                                    
-            outw[i][m] += (constant * outz[i] * (1 - outz[i]) * (target - outz[i]));
+            outw[i][m] += (constant * 100 * outz[i] * (1 - outz[i]) * (target - (100 * outz[i])));
         }
         
         capaOculta.setNeuronWeights(wij);
