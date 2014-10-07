@@ -4,6 +4,8 @@
  */
 package tateti;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -49,7 +51,8 @@ public class TaTeTi {
                             return;   
                     case 3: System.out.println("ANN\n");
                             print = false;
-                            ANN(juegos, mode);                                               
+                            for(int j = 0; j< 100; j++)
+                                ANN(juegos, mode);                                               
                             return;       
                         
                 }                                                
@@ -63,6 +66,8 @@ public class TaTeTi {
     }
     
     public static void play(int maxJuegos, Board board, TaTeTiPlayer player1, TaTeTiPlayer player2, int mode) throws Exception{                
+        LinkedList<Integer> perdidas = new LinkedList<>();
+        LinkedList<Integer> empatadas = new LinkedList<>();
         Game game = new Game(player1, player2);        
         Critic critic = new Critic();
         int x, y, winX =0, winO=0, ties=0, moveCounter = 0;
@@ -93,31 +98,47 @@ public class TaTeTi {
                     }                    
                 }                    
             }            
-            if(game.winner.equals(CellValue.O))
+            if(game.winner.equals(CellValue.O)){
                 winO++;
+                perdidas.add(jugados);                
+            }
             else if(game.winner.equals(CellValue.X))
                 winX++;
-            else
+            else{
                 ties++;
-            moveCounter += game.moveCounter;
-            if(game.winner.equals(CellValue.O)){
-                System.out.println("gandor partida " + (jugados+1) + ": " + (game.winner));                
-                
+                empatadas.add(jugados);
             }
+            moveCounter += game.moveCounter;
             
             //if(j%1000==0)
                 //player1.setUpdateConstant(player1.getUpdateConstant()/2);
             
             player1.updateWeights(game.getGameHistory(), critic.getTrainingValues(game.getGameHistory(), CellValue.X));
-            for(int i = 0; i < 6; i++){
+        }
+        System.out.println("=============================================");
+        System.out.println("=============================================");
+        for(int i = 0; i < 6; i++){
                     System.out.println("w" + i + ": " + player1.getWeights()[i]);
                 }
-        }
         System.out.println("=============================================");
         System.out.println("wins: " + winX);
         System.out.println("lost: " + winO);
         System.out.println("tied: " + ties);
         System.out.println("avarage moves: " + moveCounter/maxJuegos);
+        
+        Iterator it = perdidas.iterator();
+        System.out.print("perdidas: [");
+        while(it.hasNext()){
+            System.out.print(" " + it.next());
+        }
+        System.out.println(" ]");
+        
+        it = empatadas.iterator();
+        System.out.print("empatadas: [");
+        while(it.hasNext()){
+            System.out.print(" " + it.next());
+        }
+        System.out.println(" ]");
         critic.updateWeights(player1.getWeights(), player1.getUpdateConstant());
         //player1.printWeights();        
     }
@@ -192,7 +213,7 @@ public class TaTeTi {
 
                 moveCounter += game.moveCounter;
 
-                if(game.winner.equals(CellValue.O)){
+                if(print){
                     System.out.println("gandor partida " + (juegos) + ": " + (game.winner));
                     System.out.println("w0: " + player1.w0);
                     System.out.println("w1: " + player1.w1);
@@ -207,7 +228,7 @@ public class TaTeTi {
                 System.out.print("Volver a jugar? y/n: ");
                 String answer = s.next();
                 if(!answer.equals("y")){
-                    flag = false;               
+                    flag = false;
                     System.out.println("=============================================");
                     System.out.println("wins: " + winX);
                     System.out.println("lost: " + winO);

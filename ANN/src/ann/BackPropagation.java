@@ -65,7 +65,7 @@ public class BackPropagation {
     }
     
     public double[] updateWeigths(double target){
-        double nuevoDescuento = (Math.pow(descuento,tateti.TaTeTi.jugados));
+        double nuevoDescuento = (Math.pow(descuento,tateti.TaTeTi.jugados + 1));
         for(int i=0;i<s;i++){
             for(int j=0;j<m;j++){
                 outw[i][j] += nuevoDescuento *(constant * outz[i] * (1 - outz[i]) * (target - outz[i]) * zi[j]);            
