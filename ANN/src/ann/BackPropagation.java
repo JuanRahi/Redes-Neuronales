@@ -34,7 +34,7 @@ public class BackPropagation {
             for(int j=0; j<n+1; j++)                
                 wij[i][j] = -1.0 + (Math.random()*(1 - (-1)));
         
-        double [][] outw = new double [s][m+1];        
+        outw = new double [s][m+1];        
         for(int i=0; i<s; i++)
             for(int j=0; j< m+1; j++)
                 outw[i][j] = -1.0 + (Math.random()*(1 - (-1)));

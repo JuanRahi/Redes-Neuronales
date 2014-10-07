@@ -27,6 +27,7 @@ public class ANNPlayer implements TaTeTiPlayer {
         this.cellValue = cellValue;
         this.currentBoard = currentBoard;
         this.eg = new ExperimentGenerator();
+        backPropagation = new BackPropagation(6, 2, 1);
     }
     
     public Board chooseMove() throws Exception{
@@ -36,8 +37,7 @@ public class ANNPlayer implements TaTeTiPlayer {
         double[] results = new double[TaTeTi.MAX_CELLS*TaTeTi.MAX_CELLS];
         LinkedList<Board> availableMoves = eg.getAvailableMovesForPlayer(cellValue, currentBoard);
         Iterator it = availableMoves.iterator();
-        Random rand = new Random();
-        backPropagation = new BackPropagation(6, 2, 1);
+        Random rand = new Random();        
         while (it.hasNext()){
             currentMove = (Board)it.next();
             currentValue = vEstimate(currentMove, false);

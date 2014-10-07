@@ -26,7 +26,7 @@ public class TaTeTi {
     public static void main(String[] args) {        
         print = false;
         int mode = 3; // 0 = vsRandom -- 1 = vsOldVersion -- 2 = vsHuman         
-        int juegos = 10;
+        int juegos = 100;
         PerformanceSystem oldVersionPlayer = null;
         
         try {
@@ -113,7 +113,7 @@ public class TaTeTi {
             //if(j%1000==0)
                 //player1.setUpdateConstant(player1.getUpdateConstant()/2);
             
-            //player1.updateWeights(game.getGameHistory(), critic.getTrainingValues(game.getGameHistory(), CellValue.X));
+            player1.updateWeights(game.getGameHistory(), critic.getTrainingValues(game.getGameHistory(), CellValue.X));
         }
         System.out.println("=============================================");
         System.out.println("wins: " + winX);
