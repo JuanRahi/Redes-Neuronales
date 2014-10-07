@@ -112,6 +112,11 @@ public class ExperimentGenerator {
         }
         updateResults(playerCount, oponentCount, emptyCells, result );  
         
+        //Normalizamos el result en el rango [0-1]
+        for(int k=0; k<7; k++)
+            result[k]=(( (result[k]-(-5)) / ((5)-(-5)) ));
+        
+        
         return result;
     }
         

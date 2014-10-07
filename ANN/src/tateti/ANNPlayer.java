@@ -6,6 +6,7 @@
 package tateti;
 
 import ann.BackPropagation;
+import com.sun.corba.se.spi.ior.iiop.MaxStreamFormatVersionComponent;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
@@ -22,12 +23,13 @@ public class ANNPlayer implements TaTeTiPlayer {
     boolean print = false;
     BackPropagation backPropagation;
     double updateConstant;
+    double[] weights;
     
     public ANNPlayer(Board currentBoard, TaTeTi.CellValue cellValue){
         this.cellValue = cellValue;
         this.currentBoard = currentBoard;
         this.eg = new ExperimentGenerator();
-        backPropagation = new BackPropagation(6, 2, 1);
+        backPropagation = new BackPropagation(6, 9, 1);
     }
     
     public Board chooseMove() throws Exception{
@@ -97,10 +99,14 @@ public class ANNPlayer implements TaTeTiPlayer {
             if(TaTeTi.print)
                 System.out.println("puntaje: " + vEst + ", vTrain: " + vTrain);
             
-            backPropagation.updateWeigths(vTrain);
+            weights = backPropagation.updateWeigths(vTrain);
         }            
     }
     
+    public double[] getWeights(){
+        return weights;
+    }
+   
     
     public void setUpdateConstant(double update){
         updateConstant= update;

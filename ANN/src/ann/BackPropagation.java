@@ -27,12 +27,17 @@ public class BackPropagation {
         m = hiddenUnits;
         s = outputUnits;        
         
-           // INICIALIZAR PESOS           
+        // INICIALIZAR PESOS CON VALORES OBTENIDOS EN TAREA 1
         wij = new double [m][n+1];        
-        for(int i=0; i< m; i++)
-            for(int j=0; j<n+1; j++)                
-                wij[i][j] = -1.0 + (Math.random()*(1 - (-1)));
-        
+        for(int i=0; i< m; i++){
+            wij[i][0] = 14.296025377586968;
+            wij[i][1] = 0.8587015586144036;
+            wij[i][2] = 12.879713603905838;
+            wij[i][3] = 1.200823683287427;
+            wij[i][4] = 4.7046462897541605;
+            wij[i][5] = 2.7292736238399526;
+            
+        }
         outw = new double [s][m+1];        
         for(int i=0; i<s; i++)
             for(int j=0; j< m+1; j++)
@@ -56,7 +61,7 @@ public class BackPropagation {
         return outz [s-1];
     }
     
-    public void updateWeigths(double target){
+    public double[] updateWeigths(double target){
         for(int i=0;i<s;i++){
             for(int j=0;j<m;j++){
                 outw[i][j] += (constant * outz[i] * (1 - outz[i]) * (target - outz[i]) * zi[j]);            
@@ -68,5 +73,7 @@ public class BackPropagation {
         
         capaOculta.setNeuronWeights(wij);
         capaSalida.setNeuronWeights(outw);
+        
+        return wij[0];
     }
 }

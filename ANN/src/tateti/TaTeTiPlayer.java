@@ -16,5 +16,5 @@ public interface TaTeTiPlayer {
     public double getUpdateConstant();    
     public void setUpdateConstant(double update);
     public void updateWeights(LinkedList<Board> gameHistory, double[] vTrainValues) throws Exception;
-    
+    public double[] getWeights();
 }

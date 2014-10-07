@@ -120,7 +120,7 @@ public class TaTeTi {
         System.out.println("lost: " + winO);
         System.out.println("tied: " + ties);
         System.out.println("avarage moves: " + moveCounter/juegos);
-        //critic.updateWeights(player1.getWeights(), player1.constant);
+        critic.updateWeights(player1.getWeights(), player1.getUpdateConstant());
         //player1.printWeights();        
     }
     
