@@ -22,6 +22,8 @@ public class TaTeTi {
     static int MAX_CELLS = 5;
     static boolean print;
     public static int jugados;
+    static int buenas =0;
+    static int malas = 0;
 
     /**
      * @param args the command line arguments
@@ -52,7 +54,12 @@ public class TaTeTi {
                     case 3: System.out.println("ANN\n");
                             print = false;
                             for(int j = 0; j< 100; j++)
-                                ANN(juegos, mode);                                               
+                                ANN(juegos, mode);
+                            System.out.println("==================================");
+                            System.out.println("RESUMEN");
+                            System.out.println("==================================");
+                            System.out.println("buenas: " + buenas);
+                            System.out.println("malas: " + malas);
                             return;       
                         
                 }                                                
@@ -115,30 +122,38 @@ public class TaTeTi {
             
             player1.updateWeights(game.getGameHistory(), critic.getTrainingValues(game.getGameHistory(), CellValue.X));
         }
-        System.out.println("=============================================");
-        System.out.println("=============================================");
-        for(int i = 0; i < 6; i++){
-                    System.out.println("w" + i + ": " + player1.getWeights()[i]);
-                }
-        System.out.println("=============================================");
-        System.out.println("wins: " + winX);
-        System.out.println("lost: " + winO);
-        System.out.println("tied: " + ties);
-        System.out.println("avarage moves: " + moveCounter/maxJuegos);
         
-        Iterator it = perdidas.iterator();
-        System.out.print("perdidas: [");
-        while(it.hasNext()){
-            System.out.print(" " + it.next());
+        if(winX<90){
+            System.out.println("=============================================");
+            System.out.println("=============================================");
+            for(int i = 0; i < 6; i++){
+                        System.out.println("w" + i + ": " + player1.getWeights()[i]);
+                    }
+            System.out.println("=============================================");
+            System.out.println("wins: " + winX);
+            System.out.println("lost: " + winO);
+            System.out.println("tied: " + ties);
+            System.out.println("avarage moves: " + moveCounter/maxJuegos);
+
+            Iterator it = perdidas.iterator();
+            System.out.print("perdidas: [");
+            while(it.hasNext()){
+                System.out.print(" " + it.next());
+            }
+            System.out.println(" ]");
+
+            it = empatadas.iterator();
+            System.out.print("empatadas: [");
+            while(it.hasNext()){
+                System.out.print(" " + it.next());
+            }
+            System.out.println(" ]");
+            malas++;
         }
-        System.out.println(" ]");
+        else{
+            buenas++;
+        }       
         
-        it = empatadas.iterator();
-        System.out.print("empatadas: [");
-        while(it.hasNext()){
-            System.out.print(" " + it.next());
-        }
-        System.out.println(" ]");
         critic.updateWeights(player1.getWeights(), player1.getUpdateConstant());
         //player1.printWeights();        
     }

@@ -27,19 +27,17 @@ public class BackPropagation {
         n = inputUnits;
         m = hiddenUnits;
         s = outputUnits;        
-        
-        // INICIALIZAR PESOS CON VALORES OBTENIDOS EN TAREA 1
+        double tmp;
+        // INICIALIZAR PESOS
         wij = new double [m][n+1];        
         for(int i=0; i< m; i++){
-            for(int j=0; j< n+1; j++)
-                wij[i][j] = Math.random();
-//            wij[i][0] = 14.296025377586968;
-//            wij[i][1] = 0.8587015586144036;
-//            wij[i][2] = 12.879713603905838;
-//            wij[i][3] = 1.200823683287427;
-//            wij[i][4] = 4.7046462897541605;
-//            wij[i][5] = 2.7292736238399526;
-//            
+            for(int j=0; j< n+1; j++){
+                tmp = Math.random();
+                if(tmp<0.1)
+                    wij[i][j] = tmp * 6;
+                else
+                    wij[i][j] = tmp;
+            }
         }
         outw = new double [s][m+1];        
         for(int i=0; i<s; i++)
