@@ -17,7 +17,7 @@ public class ANN {
     // TAMAÑO SALIDA
     private static int s = 1;
     // UNIDADES EN LA CAPA OCULTA
-    private static int m = 3;
+    private static int m = 2;
     // CONJUNTO DE ENTRENAMIENTO
     private static int d = 20;
     // CTE DE APRENDIZAJE
@@ -110,7 +110,8 @@ public class ANN {
 
             }
             
-            //System.out.printf("%.2f\n", error);                    
+            if(l == iteraciones -1)
+                System.out.printf("E: %.2f\n", error);                    
             
         }
         
