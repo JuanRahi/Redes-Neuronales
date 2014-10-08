@@ -14,7 +14,7 @@ public class BackPropagation {
     private int n;
     private int m;
     private int s;
-    private final double constant = 0.1;
+    private double constant;
     private final double descuento = 0.8;
     double [][] wij;
     double [][] outw;
@@ -24,6 +24,7 @@ public class BackPropagation {
     NeuronLayer capaOculta, capaSalida;
     
     public BackPropagation(int inputUnits, int hiddenUnits, int outputUnits){        
+        constant = 0.1;
         n = inputUnits;
         m = hiddenUnits;
         s = outputUnits;        
@@ -66,16 +67,30 @@ public class BackPropagation {
         double nuevoDescuento = (Math.pow(descuento,tateti.TaTeTi.jugados + 1));
         for(int i=0;i<s;i++){
             for(int j=0;j<m;j++){
-                outw[i][j] += nuevoDescuento *(constant * outz[i] * (1 - outz[i]) * (target - outz[i]) * zi[j]);            
+                outw[i][j] += nuevoDescuento *(getConstant() * outz[i] * (1 - outz[i]) * (target - outz[i]) * zi[j]);            
                 for(int a=0; a<n+1; a++)
-                    wij[j][a] += nuevoDescuento *(constant * zi[j] * (1 - zi[j]) *  (target - outz[i]) * input[a]);
+                    wij[j][a] += nuevoDescuento *(getConstant() * zi[j] * (1 - zi[j]) *  (target - outz[i]) * input[a]);
             }                                    
-            outw[i][m] += nuevoDescuento * (constant  * outz[i] * (1 - outz[i]) * (target - outz[i]));
+            outw[i][m] += nuevoDescuento * (getConstant()  * outz[i] * (1 - outz[i]) * (target - outz[i]));
         }
         
         capaOculta.setNeuronWeights(wij);
         capaSalida.setNeuronWeights(outw);
         
         return wij[0];
+    }
+
+    /**
+     * @return the constant
+     */
+    public double getConstant() {
+        return constant;
+    }
+
+    /**
+     * @param constant the constant to set
+     */
+    public void setConstant(double constant) {
+        this.constant = constant;
     }
 }

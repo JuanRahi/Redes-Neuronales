@@ -30,7 +30,7 @@ public class TaTeTi {
      */
     public static void main(String[] args) {        
         print = false;
-        int mode = 3; // 0 = vsRandom -- 1 = vsOldVersion -- 2 = vsHuman         
+        int mode = 0; // 0 = vsRandom -- 1 = vsOldVersion -- 2 = vsHuman         
         int juegos = 100;
         PerformanceSystem oldVersionPlayer = null;
         
@@ -39,7 +39,7 @@ public class TaTeTi {
                 switch (mode){
                     case 0: System.out.println("VS RANDOM PLAYER\n");
                             oldVersionPlayer = vsRandomPlayer(juegos, mode);                   
-                            mode = 1;
+                            mode = 3;
                             break;
                     case 1: System.out.println("VS OLD VERSION\n");
                             oldVersionPlayer = vsOldVersion(juegos, mode, oldVersionPlayer);
@@ -54,7 +54,7 @@ public class TaTeTi {
                     case 3: System.out.println("ANN\n");
                             print = false;
                             for(int j = 0; j< 100; j++)
-                                ANN(juegos, mode);
+                                ANN(juegos, mode, oldVersionPlayer);
                             System.out.println("==================================");
                             System.out.println("RESUMEN");
                             System.out.println("==================================");
@@ -158,10 +158,11 @@ public class TaTeTi {
         //player1.printWeights();        
     }
     
-    private static void ANN(int juegos, int mode) throws Exception {
+    private static void ANN(int juegos, int mode, PerformanceSystem oldVersion) throws Exception {
         Board board = new Board();
         TaTeTiPlayer player1 = new ANNPlayer(board, CellValue.X);
-        TaTeTiPlayer player2 = new PerformanceSystem(board, CellValue.O);
+        //player1.setUpdateConstant(0.00001);
+        TaTeTiPlayer player2 = new PerformanceSystem(board, CellValue.O, oldVersion.getWeights(), oldVersion.constant);
         play(juegos, board, player1, player2, mode);        
     }
     

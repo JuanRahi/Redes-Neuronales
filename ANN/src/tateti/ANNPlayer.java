@@ -6,7 +6,6 @@
 package tateti;
 
 import ann.BackPropagation;
-import com.sun.corba.se.spi.ior.iiop.MaxStreamFormatVersionComponent;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
@@ -77,6 +76,7 @@ public class ANNPlayer implements TaTeTiPlayer {
         return bestMove;
     }
     
+    @Override
     public void setBoard(Board board){
         this.currentBoard = board;
     }
@@ -88,6 +88,7 @@ public class ANNPlayer implements TaTeTiPlayer {
     }
 
     
+    @Override
     public void updateWeights(LinkedList<Board> gameHistory, double[] vTrainValues) throws Exception{
         double vTrain, vEst;
         Board board;
@@ -108,12 +109,14 @@ public class ANNPlayer implements TaTeTiPlayer {
     }
    
     
+    @Override
     public void setUpdateConstant(double update){
-        updateConstant= update;
+        backPropagation.setConstant(update);
     }
     
     
+    @Override
     public double getUpdateConstant(){
-        return updateConstant;
+        return backPropagation.getConstant();
     }
 }
