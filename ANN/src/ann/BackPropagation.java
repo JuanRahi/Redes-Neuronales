@@ -34,8 +34,8 @@ public class BackPropagation {
         for(int i=0; i< m; i++){
             for(int j=0; j< n+1; j++){
                 tmp = Math.random();
-                if(tmp<0.1)
-                    wij[i][j] = tmp * 6;
+                if(tmp<0.3)
+                    wij[i][j] = 0.3;
                 else
                     wij[i][j] = tmp;
             }
